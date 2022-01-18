@@ -1,7 +1,28 @@
 # Machine-Learning
+
 Independent Study on Machine Learning. I will look into Overfitting and Regularization, Optimization, and Supervised and Unsupervised Learning topics.
 
 1. Introduction, Overfitting, and Regularization
+
+Regularization:
+
+This is the technique that helps in avoiding overfitting and also it increasese model interpretability
+
+This is a form of regression, that constrains / regularizes or shrinks the coefficient estimates towards zero.
+
+In addition, this technique discourages learning a more complex or flexible model, so as avoid the risk of overfitting. 
+
+Overfitted Model:
+
+The model is not able to predict the output or target column for the unseen data by introducing noise in the output.
+
+"Noise" - this means those data points in the dataset which don't really represent the true properties of your data, but only due to a random chance.
+
+Types of Regularization Techniques
+
+1. Ridge Regression
+2. Lasso Regression
+
 
 
 
@@ -49,6 +70,7 @@ Independent Study on Machine Learning. I will look into Overfitting and Regulari
 
 
 References 
+
 [1] C. Aggarwal, Neural Networks and Deep Learning: A Textbook, Springer International Publishing, 2018.
 
 [2] M. Awad and R. Khanna, Efficient Learning Machines: Theories, Concepts, and Applications for Engineers and System Designers, Apress, 2015.
