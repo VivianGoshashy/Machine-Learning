@@ -1,0 +1,123 @@
+# importing libraries
+%matplotlib inline
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import Ridge
+from sklearn.linear_model import Lasso
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import r2_score
+from sklearn.linear_model import LinearRegression
+
+
+# Loading dataset
+GPA = pd.read_csv('FirstYearGPA.csv')
+
+# Looking at the first 5 column of the FirstYearGPA dataset
+GPA.head()
+
+# Preparing dataset
+target_column = ['GPA']
+predictors = list(set(list(GPA.columns))-set(target_column))
+
+# Normalizing by scaling the predictors between 0 and 1. This is done when the units of the varibalrs differ significantly and may influence the modeling process.
+# GPA[predictors] = GPA[predictors]/GPA[predictors].max()
+
+# Creating the training and Test datasets
+X = GPA[predictors].values
+y = GPA[target_column].values
+
+# or could use
+# X = GPA.iloc[:, :-1].values
+# y = GPA.iloc[:, 1].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=40)
+
+print(X_train.shape)
+print(X_test.shape)
+
+# Multiple Linear regression model
+lm = LinearRegression()
+lm.fit(X_train, y_train)
+
+# Genereating prediction on test set
+lm_train_pred = lm.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print(np.sqrt(mean_squared_error(y_train,lm_train_pred)))
+print(r2_score(y_train, lm_train_pred))
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+lm_test_pred = lm.predict(X_test)
+print(np.sqrt(mean_squared_error(y_test,lm_test_pred))) 
+print(r2_score(y_test, lm_test_pred))
+
+# retrieving the intercept
+print(lm.intercept_)
+
+# retrieving the coefficients
+print(lm.coef_)
+
+
+# Ridge regression model with an alpha value of 0.01
+rr = Ridge(alpha=0.01)
+
+# fitting the model to the training data
+rr.fit(X_train, y_train) 
+
+# predicting
+pred_train_rr= rr.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print(np.sqrt(mean_squared_error(y_train,pred_train_rr)))
+print(r2_score(y_train, pred_train_rr))
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_rr= rr.predict(X_test)
+print(np.sqrt(mean_squared_error(y_test,pred_test_rr))) 
+print(r2_score(y_test, pred_test_rr))
+
+# intercept
+print(rr.intercept_)
+
+# Coefficients
+print(rr.coef_)
+
+# Lasso Regression Model with an alpha value of 0.01
+model_lasso = Lasso(alpha=0.01)
+
+# fitting the model to the training data
+model_lasso.fit(X_train, y_train) 
+
+# predicting 
+pred_train_lasso= model_lasso.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print(np.sqrt(mean_squared_error(y_train,pred_train_lasso)))
+print(r2_score(y_train, pred_train_lasso))
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_lasso= model_lasso.predict(X_test)
+print(np.sqrt(mean_squared_error(y_test,pred_test_lasso))) 
+print(r2_score(y_test, pred_test_lasso))
+
+# Intercept
+print(model_lasso.intercept_)
+
+# Coefficient
+print(model_lasso.coef_)
+
+
+
+
+
+
+
+
+
+
