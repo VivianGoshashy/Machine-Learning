@@ -111,13 +111,3 @@ print(model_lasso.intercept_)
 
 # Coefficient
 print(model_lasso.coef_)
-
-
-
-
-
-
-
-
-
-
