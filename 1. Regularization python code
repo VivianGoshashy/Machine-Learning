@@ -41,6 +41,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random
 print(X_train.shape)
 print(X_test.shape)
 
+def MAPE(Y_actual,Y_Predicted):
+    mape = np.mean(np.abs((Y_actual - Y_Predicted)/Y_actual))*100
+    return mape
+
 # Multiple Linear regression model
 lm = LinearRegression()
 lm.fit(X_train, y_train)
@@ -57,57 +61,273 @@ lm_test_pred = lm.predict(X_test)
 print(np.sqrt(mean_squared_error(y_test,lm_test_pred))) 
 print(r2_score(y_test, lm_test_pred))
 
-# retrieving the intercept
-print(lm.intercept_)
+Lm_MAPE = MAPE(y_test,lm_test_pred)
+print("MAPE value:                  ",Lm_MAPE)
+Accuracy = 100 - Lm_MAPE
+print('Accuracy of Linear Regression: {:0.2f}%.'.format(Accuracy))
 
-# retrieving the coefficients
-print(lm.coef_)
+# retrieving the intercept and the coefficients
+print(lm.intercept_,lm.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, lm_test_pred, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
 
 
 # Ridge regression model with an alpha value of 0.01
-rr = Ridge(alpha=0.01)
+rr1 = Ridge(alpha=0.01)
 
 # fitting the model to the training data
-rr.fit(X_train, y_train) 
+rr1.fit(X_train, y_train) 
 
 # predicting
-pred_train_rr= rr.predict(X_train)
+pred_train_rr1= rr1.predict(X_train)
 
 # prints the evaluation metrics (RMSE and R-squared) on the train set
-print(np.sqrt(mean_squared_error(y_train,pred_train_rr)))
-print(r2_score(y_train, pred_train_rr))
+print('RMSE of train set:       ', np.sqrt(mean_squared_error(y_train,pred_train_rr1)))
+print('R-Squared of train set: ',r2_score(y_train, pred_train_rr1)*100,'%')
 
 # prints the evaluation metrics (RMSE and R-squared) on the test set
-pred_test_rr= rr.predict(X_test)
-print(np.sqrt(mean_squared_error(y_test,pred_test_rr))) 
-print(r2_score(y_test, pred_test_rr))
+pred_test_rr1= rr1.predict(X_test)
+print('RMSE of test set:        ',np.sqrt(mean_squared_error(y_test,pred_test_rr1))) 
+print('R-Squared of test set:  ',r2_score(y_test, pred_test_rr1)*100,'%')
 
-# intercept
-print(rr.intercept_)
+Ridge_MAPE = MAPE(y_test,pred_test_rr1)
+print("MAPE value:             ",Ridge_MAPE)
+Accuracy = 100 - Ridge_MAPE
+print('Accuracy of Ridge Regression: {:0.2f}%.'.format(Accuracy))
 
-# Coefficients
-print(rr.coef_)
+# retrieving the intercept and the coefficients
+print(rr1.intercept_,rr1.coef_)
 
-# Lasso Regression Model with an alpha value of 0.01
-model_lasso = Lasso(alpha=0.01)
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_rr1, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Normalized Ridge regression model with an alpha value of 0.01
+rr2 = Ridge(alpha=0.01, normalize = True)
 
 # fitting the model to the training data
-model_lasso.fit(X_train, y_train) 
+rr2.fit(X_train, y_train) 
 
-# predicting 
-pred_train_lasso= model_lasso.predict(X_train)
+# predicting
+pred_train_rr2= rr2.predict(X_train)
 
 # prints the evaluation metrics (RMSE and R-squared) on the train set
-print(np.sqrt(mean_squared_error(y_train,pred_train_lasso)))
-print(r2_score(y_train, pred_train_lasso))
+print('RMSE of train set:          ',np.sqrt(mean_squared_error(y_train,pred_train_rr2)))
+print('R-Squared of train set:    ',r2_score(y_train, pred_train_rr2)*100,'%')
 
 # prints the evaluation metrics (RMSE and R-squared) on the test set
-pred_test_lasso= model_lasso.predict(X_test)
-print(np.sqrt(mean_squared_error(y_test,pred_test_lasso))) 
-print(r2_score(y_test, pred_test_lasso))
+pred_test_rr2= rr2.predict(X_test)
+print('RMSE of test set:           ',np.sqrt(mean_squared_error(y_test,pred_test_rr2))) 
+print('R-Squared of test set:     ',r2_score(y_test, pred_test_rr2)*100,'%')
 
-# Intercept
-print(model_lasso.intercept_)
+Ridge_MAPE = MAPE(y_test,pred_test_rr2)
+print("MAPE value:                ",Ridge_MAPE)
+Accuracy = 100 - Ridge_MAPE
+print('Accuracy of Ridge Regression: {:0.2f}%.'.format(Accuracy))
 
-# Coefficient
-print(model_lasso.coef_)
+# retrieving the intercept and the coefficients
+print(rr2.intercept_,rr2.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_rr2, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Ridge regression model with an alpha value of 1
+rr3 = Ridge(alpha=1)
+
+# fitting the model to the training data
+rr3.fit(X_train, y_train) 
+
+# predicting
+pred_train_rr3= rr3.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print('RMSE of train set:          ',np.sqrt(mean_squared_error(y_train,pred_train_rr3)))
+print('R-Squared of train set:    ',r2_score(y_train, pred_train_rr3)*100,'%')
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_rr3= rr3.predict(X_test)
+print('RMSE of test set:           ',np.sqrt(mean_squared_error(y_test,pred_test_rr3))) 
+print('R-Squared of test set:     ',r2_score(y_test, pred_test_rr3)*100,'%')
+
+Ridge_MAPE = MAPE(y_test,pred_test_rr3)
+print("MAPE value:                ",Ridge_MAPE)
+Accuracy = 100 - Ridge_MAPE
+print('Accuracy of Ridge Regression: {:0.2f}%.'.format(Accuracy))
+
+# retrieving the intercept and the coefficients
+print(rr3.intercept_,rr3.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_rr3, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Normalized Ridge regression model with an alpha value of 1
+rr4 = Ridge(alpha=1, normalize = True)
+
+# fitting the model to the training data
+rr4.fit(X_train, y_train) 
+
+# predicting
+pred_train_rr4= rr4.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print('RMSE of train set:          ',np.sqrt(mean_squared_error(y_train,pred_train_rr4)))
+print('R-Squared of train set:    ',r2_score(y_train, pred_train_rr4)*100,'%')
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_rr4= rr4.predict(X_test)
+print('RMSE of test set:           ',np.sqrt(mean_squared_error(y_test,pred_test_rr4))) 
+print('R-Squared of test set:     ',r2_score(y_test, pred_test_rr4)*100,'%')
+
+Ridge_MAPE = MAPE(y_test,pred_test_rr4)
+print("MAPE value:                ",Ridge_MAPE)
+Accuracy = 100 - Ridge_MAPE
+print('Accuracy of Ridge Regression: {:0.2f}%.'.format(Accuracy))
+
+# retrieving the intercept and the coefficients
+print(rr4.intercept_,rr4.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_rr4, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Lasso Regression Model with an alpha value of 0.01
+model_lasso1 = Lasso(alpha=0.01)
+
+# fitting the model to the training data
+model_lasso1.fit(X_train, y_train) 
+
+# predicting 
+pred_train_lasso1= model_lasso1.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print('RMSE of train set:           ',np.sqrt(mean_squared_error(y_train,pred_train_lasso1)))
+print('R-Squared of train set:     ',r2_score(y_train, pred_train_lasso1)*100,'%')
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_lasso1= model_lasso1.predict(X_test)
+print('RMSE of test set:            ',np.sqrt(mean_squared_error(y_test,pred_test_lasso1))) 
+print('R-Squared of test set:      ',r2_score(y_test, pred_test_lasso1)*100,"%")
+
+Lasso_MAPE = MAPE(y_test,pred_test_lasso1)
+print("MAPE value:                 ",Lasso_MAPE)
+Accuracy = 100 - Lasso_MAPE
+print('Accuracy of Lasso Regression: {:0.2f}%.'.format(Accuracy))
+
+# retrieving the intercept and the coefficients
+print(model_lasso1.intercept_,model_lasso1.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_lasso1, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Normalized Lasso Regression Model with an alpha value of 0.01
+model_lasso2 = Lasso(alpha=0.01, normalize = True)
+
+# fitting the model to the training data
+model_lasso2.fit(X_train, y_train) 
+
+# predicting 
+pred_train_lasso2= model_lasso2.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print('RMSE of train set:           ',np.sqrt(mean_squared_error(y_train,pred_train_lasso2)))
+print('R-Squared of train set:     ',r2_score(y_train, pred_train_lasso2)*100,"%")
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_lasso2= model_lasso2.predict(X_test)
+print('RMSE of test set:            ',np.sqrt(mean_squared_error(y_test,pred_test_lasso2))) 
+print('R-Squared of test set:       ',r2_score(y_test, pred_test_lasso2)*100,"%")
+
+Lasso_MAPE = MAPE(y_test,pred_test_lasso2)
+print("MAPE value:                 ",Lasso_MAPE)
+Accuracy = 100 - Lasso_MAPE
+print('Accuracy of Lasso Regression: {:0.2f}%.'.format(Accuracy))
+
+# retrieving the intercept and the coefficients
+print(model_lasso2.intercept_,model_lasso2.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_lasso2, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Lasso Regression Model with an alpha value of 1
+model_lasso3 = Lasso(alpha=1)
+
+# fitting the model to the training data
+model_lasso3.fit(X_train, y_train) 
+
+# predicting 
+pred_train_lasso3= model_lasso3.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print('RMSE of train set:           ',np.sqrt(mean_squared_error(y_train,pred_train_lasso3)))
+print('R-Squared of train set:      ',r2_score(y_train, pred_train_lasso3)*100,"%")
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_lasso3= model_lasso3.predict(X_test)
+print('RMSE of test set:            ',np.sqrt(mean_squared_error(y_test,pred_test_lasso3))) 
+print('R-Squared of test set:      ',r2_score(y_test, pred_test_lasso3)*100,"%")
+
+Lasso_MAPE = MAPE(y_test,pred_test_lasso3)
+print("MAPE value:                 ",Lasso_MAPE)
+Accuracy = 100 - Lasso_MAPE
+print('Accuracy of Lasso Regression: {:0.2f}%.'.format(Accuracy))
+
+# retrieving the intercept and the coefficients
+print(model_lasso3.intercept_,model_lasso3.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_lasso3, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
+
+# Normalized Lasso Regression Model with an alpha value of 1
+model_lasso4 = Lasso(alpha=1, normalize = True)
+
+# fitting the model to the training data
+model_lasso4.fit(X_train, y_train) 
+
+# predicting 
+pred_train_lasso4= model_lasso4.predict(X_train)
+
+# prints the evaluation metrics (RMSE and R-squared) on the train set
+print('RMSE of train set:           ',np.sqrt(mean_squared_error(y_train,pred_train_lasso4)))
+print('R-Squared of train set:      ',r2_score(y_train, pred_train_lasso4)*100,"%")
+
+# prints the evaluation metrics (RMSE and R-squared) on the test set
+pred_test_lasso4= model_lasso4.predict(X_test)
+print('RMSE of test set:            ',np.sqrt(mean_squared_error(y_test,pred_test_lasso4))) 
+print('R-Squared of test set:      ',r2_score(y_test, pred_test_lasso4)*100,"%")
+
+Lasso_MAPE = MAPE(y_test,pred_test_lasso4)
+print("MAPE value:                 ",Lasso_MAPE)
+Accuracy = 100 - Lasso_MAPE
+print('Accuracy of Lasso Regression: {:0.2f}%.'.format(Accuracy))
+
+# retrieving the intercept and the coefficients
+print(model_lasso4.intercept_,model_lasso4.coef_)
+
+x_ax = range(len(X_test))
+plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+plt.plot(x_ax, pred_test_lasso4, lw=0.8, color="red", label="predicted")
+plt.legend()
+plt.show()
