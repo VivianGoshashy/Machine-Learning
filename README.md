@@ -29,7 +29,9 @@ Lasso stands for Least Absolute and Selection Operator which is know as the L-1 
 
 
 2. Optimization
+
  a. Gradient Descent
+ 
  b. Stochastic Gradient Descent
 
 
