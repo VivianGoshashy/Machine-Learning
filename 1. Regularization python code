@@ -1,8 +1,6 @@
 # importing libraries
 %matplotlib inline
 
-import pandas as pd
-import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -13,7 +11,12 @@ from sklearn.linear_model import Lasso
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import r2_score
 from sklearn.linear_model import LinearRegression
-
+from sklearn import preprocessing 
+from sklearn.preprocessing import StandardScaler
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+from sklearn.linear_model import RidgeCV
+from sklearn.linear_model import LassoCV
+from sklearn.model_selection import KFold
 
 # Loading dataset
 GPA = pd.read_csv('FirstYearGPA.csv')
@@ -21,20 +24,146 @@ GPA = pd.read_csv('FirstYearGPA.csv')
 # Looking at the first 5 column of the FirstYearGPA dataset
 GPA.head()
 
-# Preparing dataset
-target_column = ['GPA']
-predictors = list(set(list(GPA.columns))-set(target_column))
+# Looking at the dtype
+GPA.info()
 
-# Normalizing by scaling the predictors between 0 and 1. This is done when the units of the varibalrs differ significantly and may influence the modeling process.
-# GPA[predictors] = GPA[predictors]/GPA[predictors].max()
+# statistical summary
+GPA.describe()
+
+# DATA VISUALIZATION
+
+# Scatter plot with HSGPA against GPA
+plt.scatter(GPA['HSGPA'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('HSGPA')
+plt.ylabel('GPA')
+  
+plt.show()
+
+
+# Scatter plot with SATV and GPA
+plt.scatter(GPA['SATV'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('SATV ')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Scatter plot with SATM and GPA
+plt.scatter(GPA['SATM'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('SATM ')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Scatter plot with Male and GPA
+plt.scatter(GPA['Male'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('Male')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Scatter plot with HU and GPA
+plt.scatter(GPA['HU'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('HU ')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Scatter plot with SS and GPA
+plt.scatter(GPA['SS'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('SS ')
+plt.ylabel('GPA')
+  
+plt.show()
+
+
+# Scatter plot with FirstGen and GPA
+plt.scatter(GPA['FirstGen'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('FirstGen ')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Scatter plot with White and GPA
+plt.scatter(GPA['White'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('White')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Scatter plot with CollegeBound and GPA
+plt.scatter(GPA['CollegeBound'], GPA['GPA'])
+  
+# Adding Title to the Plot
+plt.title("Scatter Plot")
+  
+# Setting the X and Y labels
+plt.xlabel('CollegeBound')
+plt.ylabel('GPA')
+  
+plt.show()
+
+# Creating histogram
+fig, axs = plt.subplots(1, 1,
+                        figsize =(10, 7),
+                        tight_layout = True)
+ 
+axs.hist(GPA, bins = 5)
+ 
+# Show plot
+plt.show()
+
+# Standardizing variables
+
+#scale the data to have mean 0 stdev 1
+GPA = preprocessing.scale(GPA)
+GPA = pd.DataFrame(GPA)
+
+#list of predictors for legend
+predictors = list(GPA.columns.values)[1:10]
 
 # Creating the training and Test datasets
-X = GPA[predictors].values
-y = GPA[target_column].values
-
-# or could use
-# X = GPA.iloc[:, :-1].values
-# y = GPA.iloc[:, 1].values
+X = GPA.iloc[:,1:10]
+y = GPA.iloc[:,9]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.30, random_state=40)
 
@@ -44,7 +173,16 @@ print(X_test.shape)
 def MAPE(Y_actual,Y_Predicted):
     mape = np.mean(np.abs((Y_actual - Y_Predicted)/Y_actual))*100
     return mape
+    
+ #VIF Calculations
+###Calculate VIF Factors
+vif=pd.DataFrame()
+vif["VIF Factor"] = [variance_inflation_factor(X.values,i) for i in range(X.shape[1])]
+vif["features"]=X.columns
 
+print (vif.round(2))
+
+# LINEAR REGRESSION
 # Multiple Linear regression model
 lm = LinearRegression()
 lm.fit(X_train, y_train)
@@ -53,13 +191,13 @@ lm.fit(X_train, y_train)
 lm_train_pred = lm.predict(X_train)
 
 # prints the evaluation metrics (RMSE and R-squared) on the train set
-print(np.sqrt(mean_squared_error(y_train,lm_train_pred)))
-print(r2_score(y_train, lm_train_pred))
+print('RMSE of train set:            ',np.sqrt(mean_squared_error(y_train,lm_train_pred)))
+print('R-Squared of train set:      ',r2_score(y_train, lm_train_pred)*100,'%')
 
 # prints the evaluation metrics (RMSE and R-squared) on the test set
 lm_test_pred = lm.predict(X_test)
-print(np.sqrt(mean_squared_error(y_test,lm_test_pred))) 
-print(r2_score(y_test, lm_test_pred))
+print('RMSE of est set:              ',np.sqrt(mean_squared_error(y_test,lm_test_pred))) 
+print('R-Squared of test set:       ',r2_score(y_test, lm_test_pred)*100,"%")
 
 Lm_MAPE = MAPE(y_test,lm_test_pred)
 print("MAPE value:                  ",Lm_MAPE)
@@ -75,9 +213,9 @@ plt.plot(x_ax, lm_test_pred, lw=0.8, color="red", label="predicted")
 plt.legend()
 plt.show()
 
-
+# RIDGE REGRESSION
 # Ridge regression model with an alpha value of 0.01
-rr1 = Ridge(alpha=0.01)
+rr1 = Ridge(alpha=0.01,solver="cholesky")
 
 # fitting the model to the training data
 rr1.fit(X_train, y_train) 
@@ -105,38 +243,6 @@ print(rr1.intercept_,rr1.coef_)
 x_ax = range(len(X_test))
 plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
 plt.plot(x_ax, pred_test_rr1, lw=0.8, color="red", label="predicted")
-plt.legend()
-plt.show()
-
-# Normalized Ridge regression model with an alpha value of 0.01
-rr2 = Ridge(alpha=0.01, normalize = True)
-
-# fitting the model to the training data
-rr2.fit(X_train, y_train) 
-
-# predicting
-pred_train_rr2= rr2.predict(X_train)
-
-# prints the evaluation metrics (RMSE and R-squared) on the train set
-print('RMSE of train set:          ',np.sqrt(mean_squared_error(y_train,pred_train_rr2)))
-print('R-Squared of train set:    ',r2_score(y_train, pred_train_rr2)*100,'%')
-
-# prints the evaluation metrics (RMSE and R-squared) on the test set
-pred_test_rr2= rr2.predict(X_test)
-print('RMSE of test set:           ',np.sqrt(mean_squared_error(y_test,pred_test_rr2))) 
-print('R-Squared of test set:     ',r2_score(y_test, pred_test_rr2)*100,'%')
-
-Ridge_MAPE = MAPE(y_test,pred_test_rr2)
-print("MAPE value:                ",Ridge_MAPE)
-Accuracy = 100 - Ridge_MAPE
-print('Accuracy of Ridge Regression: {:0.2f}%.'.format(Accuracy))
-
-# retrieving the intercept and the coefficients
-print(rr2.intercept_,rr2.coef_)
-
-x_ax = range(len(X_test))
-plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
-plt.plot(x_ax, pred_test_rr2, lw=0.8, color="red", label="predicted")
 plt.legend()
 plt.show()
 
@@ -172,38 +278,72 @@ plt.plot(x_ax, pred_test_rr3, lw=0.8, color="red", label="predicted")
 plt.legend()
 plt.show()
 
-# Normalized Ridge regression model with an alpha value of 1
-rr4 = Ridge(alpha=1, normalize = True)
+alphas = range(0,100)
+for a in alphas:
+ model = Ridge(alpha=a, normalize=True).fit(X,y) 
+ score = model.score(X, y)
+ pred_y = model.predict(X)
+ mse = mean_squared_error(y, pred_y) 
+ print("Alpha:{0:.6f}, R2:{1:.3f}, MSE:{2:.2f}, RMSE:{3:.2f}"
+    .format(a, score, mse, np.sqrt(mse)))
+    
+ ###initialize list to store coefficient values
+coef=[]
+alphas = range(0,10000)
 
-# fitting the model to the training data
-rr4.fit(X_train, y_train) 
+for a in alphas:
+  ridgereg=Ridge(alpha=a,solver="cholesky")
+  ridgereg.fit(X,y)
+  coef.append(ridgereg.coef_)
 
-# predicting
-pred_train_rr4= rr4.predict(X_train)
+###Make plot of Beta as a function of Alpha
+fig=plt.figure()
+ax=fig.add_subplot(111)
+ax.plot(alphas,coef)
+ax.set_xlabel('Alpha (Regularization Parameter)')
+ax.set_ylabel('Beta (Predictor Coefficients)')
+ax.set_title('Ridge Coefficients vs Regularization Parameters')
+ax.axis('tight')
+###ax.legend(loc='best')
+#fig.savefig('coef_vs_alpha.png')
 
-# prints the evaluation metrics (RMSE and R-squared) on the train set
-print('RMSE of train set:          ',np.sqrt(mean_squared_error(y_train,pred_train_rr4)))
-print('R-Squared of train set:    ',r2_score(y_train, pred_train_rr4)*100,'%')
+# CROSS VALIDATION IN RIDGE REGRESSION
+###Selecting lambda
+scaler=StandardScaler()
+X_std=scaler.fit_transform(X)
 
-# prints the evaluation metrics (RMSE and R-squared) on the test set
-pred_test_rr4= rr4.predict(X_test)
-print('RMSE of test set:           ',np.sqrt(mean_squared_error(y_test,pred_test_rr4))) 
-print('R-Squared of test set:     ',r2_score(y_test, pred_test_rr4)*100,'%')
+###Fit Ridge regression through cross validation
+regr_cv=RidgeCV(alphas=range(1,40),store_cv_values=True)
+model_cv=regr_cv.fit(X,y)
 
-Ridge_MAPE = MAPE(y_test,pred_test_rr4)
-print("MAPE value:                ",Ridge_MAPE)
-Accuracy = 100 - Ridge_MAPE
-print('Accuracy of Ridge Regression: {:0.2f}%.'.format(Accuracy))
+print (model_cv.alpha_)
 
-# retrieving the intercept and the coefficients
-print(rr4.intercept_,rr4.coef_)
+print(np.mean(model_cv.cv_values_, axis=0))
+
+ypred = model_cv.predict(X_test)
+score = model_cv.score(X_test,y_test)
+mse = mean_squared_error(y_test,ypred)
+print("R2:{0:.3f}, MSE:{1:.2f}, RMSE:{2:.2f}"
+   .format(score, mse, np.sqrt(mse)))
 
 x_ax = range(len(X_test))
 plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
-plt.plot(x_ax, pred_test_rr4, lw=0.8, color="red", label="predicted")
+plt.plot(x_ax, ypred, lw=0.8, color="red", label="predicted")
 plt.legend()
 plt.show()
 
+w = list()
+for a in alphas:
+    ridge_clf = RidgeCV(alphas=[a],cv=10).fit(X, y)
+    w.append(ridge_clf.coef_)
+w = np.array(w)
+plt.semilogx(alphas,w)
+plt.title('Ridge coefficients as function of the regularization')
+plt.xlabel('alpha')
+plt.ylabel('weights')
+plt.legend(X.keys())
+
+# LASSO REGRESSION
 # Lasso Regression Model with an alpha value of 0.01
 model_lasso1 = Lasso(alpha=0.01)
 
@@ -233,38 +373,6 @@ print(model_lasso1.intercept_,model_lasso1.coef_)
 x_ax = range(len(X_test))
 plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
 plt.plot(x_ax, pred_test_lasso1, lw=0.8, color="red", label="predicted")
-plt.legend()
-plt.show()
-
-# Normalized Lasso Regression Model with an alpha value of 0.01
-model_lasso2 = Lasso(alpha=0.01, normalize = True)
-
-# fitting the model to the training data
-model_lasso2.fit(X_train, y_train) 
-
-# predicting 
-pred_train_lasso2= model_lasso2.predict(X_train)
-
-# prints the evaluation metrics (RMSE and R-squared) on the train set
-print('RMSE of train set:           ',np.sqrt(mean_squared_error(y_train,pred_train_lasso2)))
-print('R-Squared of train set:     ',r2_score(y_train, pred_train_lasso2)*100,"%")
-
-# prints the evaluation metrics (RMSE and R-squared) on the test set
-pred_test_lasso2= model_lasso2.predict(X_test)
-print('RMSE of test set:            ',np.sqrt(mean_squared_error(y_test,pred_test_lasso2))) 
-print('R-Squared of test set:       ',r2_score(y_test, pred_test_lasso2)*100,"%")
-
-Lasso_MAPE = MAPE(y_test,pred_test_lasso2)
-print("MAPE value:                 ",Lasso_MAPE)
-Accuracy = 100 - Lasso_MAPE
-print('Accuracy of Lasso Regression: {:0.2f}%.'.format(Accuracy))
-
-# retrieving the intercept and the coefficients
-print(model_lasso2.intercept_,model_lasso2.coef_)
-
-x_ax = range(len(X_test))
-plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
-plt.plot(x_ax, pred_test_lasso2, lw=0.8, color="red", label="predicted")
 plt.legend()
 plt.show()
 
@@ -300,34 +408,78 @@ plt.plot(x_ax, pred_test_lasso3, lw=0.8, color="red", label="predicted")
 plt.legend()
 plt.show()
 
-# Normalized Lasso Regression Model with an alpha value of 1
-model_lasso4 = Lasso(alpha=1, normalize = True)
+alphas = range(0,10)
+for a in alphas:
+ model = Lasso(alpha=a, normalize=True).fit(X,y) 
+ score = model.score(X, y)
+ pred_y = model.predict(X)
+ mse = mean_squared_error(y, pred_y) 
+ print("Alpha:{0:.6f}, R2:{1:.3f}, MSE:{2:.2f}, RMSE:{3:.2f}"
+    .format(a, score, mse, np.sqrt(mse)))
+    
+ alphas = np.linspace(0.01,500,100)
+lasso = Lasso(max_iter=10000)
+coefs = []
 
-# fitting the model to the training data
-model_lasso4.fit(X_train, y_train) 
+for a in alphas:
+    lasso.set_params(alpha=a)
+    lasso.fit(X_train, y_train)
+    coefs.append(lasso.coef_)
 
-# predicting 
-pred_train_lasso4= model_lasso4.predict(X_train)
+ax = plt.gca()
 
-# prints the evaluation metrics (RMSE and R-squared) on the train set
-print('RMSE of train set:           ',np.sqrt(mean_squared_error(y_train,pred_train_lasso4)))
-print('R-Squared of train set:      ',r2_score(y_train, pred_train_lasso4)*100,"%")
+ax.plot(alphas, coefs)
+ax.set_xscale('log')
+plt.axis('tight')
+plt.xlabel('alpha')
+plt.ylabel('Standardized Coefficients')
+plt.title('Lasso coefficients as a function of alpha');
 
-# prints the evaluation metrics (RMSE and R-squared) on the test set
-pred_test_lasso4= model_lasso4.predict(X_test)
-print('RMSE of test set:            ',np.sqrt(mean_squared_error(y_test,pred_test_lasso4))) 
-print('R-Squared of test set:      ',r2_score(y_test, pred_test_lasso4)*100,"%")
+# CROSS VALIDATION IN LASSO REGRESSION
+# Lasso with 5 fold cross-validation
+model = LassoCV(cv=10, random_state=0, max_iter=10000)
 
-Lasso_MAPE = MAPE(y_test,pred_test_lasso4)
-print("MAPE value:                 ",Lasso_MAPE)
-Accuracy = 100 - Lasso_MAPE
-print('Accuracy of Lasso Regression: {:0.2f}%.'.format(Accuracy))
+# Fit model
+model.fit(X_train, y_train)
 
-# retrieving the intercept and the coefficients
-print(model_lasso4.intercept_,model_lasso4.coef_)
+LassoCV(cv=10, max_iter=10000, random_state=0)
 
-x_ax = range(len(X_test))
-plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
-plt.plot(x_ax, pred_test_lasso4, lw=0.8, color="red", label="predicted")
+model.alpha_
+
+# Set best alpha
+lasso_best = Lasso(alpha=model.alpha_)
+lasso_best.fit(X_train, y_train)
+
+Lasso(alpha=1)
+
+print(list(zip(lasso_best.coef_, X)))
+
+print('R squared training set', round(lasso_best.score(X_train, y_train)*100, 2))
+print('R squared test set', round(lasso_best.score(X_test, y_test)*100, 2))
+
+mean_squared_error(y_test, lasso_best.predict(X_test))
+
+plt.semilogx(model.alphas_, model.mse_path_, ":")
+plt.plot(
+    model.alphas_ ,
+    model.mse_path_.mean(axis=-1),
+    "k",
+    label="Average across the folds",
+    linewidth=2,
+)
+plt.axvline(
+    model.alpha_, linestyle="--", color="k", label="alpha: CV estimate"
+)
+
 plt.legend()
-plt.show()
+plt.xlabel("alphas")
+plt.ylabel("Mean square error")
+plt.title("Mean square error on each fold")
+plt.axis("tight")
+
+ymin, ymax = 50000, 250000
+plt.ylim(ymin, ymax);
+
+
+
+
