@@ -29,23 +29,35 @@ Lasso stands for Least Absolute and Selection Operator which is know as the L-1 
 
 
 2. Supervised Learning
+
    a. Regression
+   
       i. Linear Regression
+      
           - Simple Linear Regression
+          
           - Multiple Linear Regression
+          
      ii. Logistic Regression
+     
     iii. Polynomial Regression
     
    b. Classification
+   
       i. Linear Classifiers
+      
      ii. Support Vector Machine (SVM)
+     
     iii. Decision Tree
-     iv. K-nearest neighbor (KNN)
+    
+     iv. K-nearest neighbor (KNN
+     
       V. Random Forest
    
 3. Unsupervised Learning
 
 4. Optimization
+
   a. Gradient Descent
   
   b. Stochastic Gradient Descent
