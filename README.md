@@ -28,11 +28,27 @@ b. Lasso Regression
 Lasso stands for Least Absolute and Selection Operator which is know as the L-1 norm. Lasso regression is used to reduce the complexity of the model. Lasso regression is similar to Ridge regression except that the penalty term incudes the absolute weights instead of a square weights. In this technique, the L1 penalty has the eﬀect of forcing some of the coeﬃcient estimates to be exactly equal to zero which means there is a complete removal of some of the features for model evaluation when the tuning parameter λ is suﬃciently large. Therefore, the lasso method also performs Feature selection and is said to yield sparse models
 
 
-2. Optimization
+2. Supervised Learning
+   a. Regression
+      i. Linear Regression
+          - Simple Linear Regression
+          - Multiple Linear Regression
+     ii. Logistic Regression
+    iii. Polynomial Regression
+    
+   b. Classification
+      i. Linear Classifiers
+     ii. Support Vector Machine (SVM)
+    iii. Decision Tree
+     iv. K-nearest neighbor (KNN)
+      V. Random Forest
+   
+3. Unsupervised Learning
 
- a. Gradient Descent
- 
- b. Stochastic Gradient Descent
+4. Optimization
+  a. Gradient Descent
+  
+  b. Stochastic Gradient Descent
 
 
 
