@@ -44,7 +44,7 @@ Lasso stands for Least Absolute and Selection Operator which is know as the L-1 
     
    b. Classification
    
-      i. Linear Classifiers
+      i. Naive Bayes Classifier
       
      ii. Support Vector Machine (SVM)
      
@@ -55,6 +55,28 @@ Lasso stands for Least Absolute and Selection Operator which is know as the L-1 
       V. Random Forest
    
 3. Unsupervised Learning
+
+     - A set of statistica, tools intended for the setting in which we have only a set of features x1, x2,.....,xn measured on n observations.
+
+     - This method is not intended to make predictions because there is no associated response variable. The goal is to discover interesting things about the measurement on x1, x2,....,xn
+
+
+     i. Principal Component Analysis
+     
+     - Tool used for data visualization / data pre-processing before     supervised techniques are applied
+     
+     ii. Clustering
+     
+     - A borad class of methods for discovering unknown subgroups in data.
+        
+        a. K-Mean Clustering
+        
+        - A simple and elegant approach for partitioning a dataset into K
+        distinct, non-overlapping clusters
+        
+        b. Hierarchical Clustering
+        
+        - Result to tree based representation of the observations called a dendrogram
 
 4. Optimization
 
