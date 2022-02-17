@@ -30,19 +30,37 @@ Lasso stands for Least Absolute and Selection Operator which is know as the L-1 
 
 2. Supervised Learning
 
-   a. Regression
+- It is also known as Supervised Machine Learning. It uses labeled datasets to train algorithms to classify data / predict outcomes accurately. It uses a training set to teach models to yield the desired output. The algorithm measures its accuracy through the loss function, adjusting untill the error has been sufficiently minimized.
+
+Types of Supervised Learning
+
+   1. Regression
+   
+   - Used to understand relationship between dependent (predictors) and independent (respose) variables
    
       i. Linear Regression
       
-          - Simple Linear Regression
+      - Useful tool for predicting a quantitative response
+      
+          a. Simple Linear Regression
           
-          - Multiple Linear Regression
+             - It predicts a quantitative response Y on the basis of a single predictor variables x
+
+          Equation: Y = Beta_0 + Beta_1 * X, where Beta_0 and Beta_1 are coefficients / parameters
+          
+          b. Multiple Linear Regression
+          
+             - Useful approach in predicting a response variable on the basis of multiple predictor variables
+
+         Equation: Y = Beta_0 + Beta_1 * X_1 + Beta_2 * X_2 + ......+ Beta_p * X_p + epsilon
           
      ii. Logistic Regression
      
     iii. Polynomial Regression
     
-   b. Classification
+   2. Classification
+   
+   - Uses an algorithm to accuratly assign test data into specific categories
    
       i. Naive Bayes Classifier
       
