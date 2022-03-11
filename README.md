@@ -54,7 +54,7 @@ Types of Supervised Learning
 
          Equation: Y = Beta_0 + Beta_1 * X_1 + Beta_2 * X_2 + ......+ Beta_p * X_p + epsilon
           
-     ii. Logistic Regression
+    ii. Logistic Regression
      
     iii. Polynomial Regression
     
@@ -63,11 +63,11 @@ Types of Supervised Learning
    - Uses an algorithm to accuratly assign test data into specific categories
    
       
-     i. Support Vector Machine (SVM)
+    i. Support Vector Machine (SVM)
      
     ii. Decision Tree
     
-     iii. K-nearest neighbor (KNN
+    iii. K-nearest neighbor (KNN)
    
 3. Unsupervised Learning
 
