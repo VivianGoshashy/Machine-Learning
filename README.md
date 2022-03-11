@@ -62,15 +62,12 @@ Types of Supervised Learning
    
    - Uses an algorithm to accuratly assign test data into specific categories
    
-      i. Naive Bayes Classifier
       
-     ii. Support Vector Machine (SVM)
+     i. Support Vector Machine (SVM)
      
-    iii. Decision Tree
+    ii. Decision Tree
     
-     iv. K-nearest neighbor (KNN
-     
-      V. Random Forest
+     iii. K-nearest neighbor (KNN
    
 3. Unsupervised Learning
 
